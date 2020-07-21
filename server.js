@@ -5,6 +5,7 @@ const cors = require("cors");
 const users = require("./controllers/user-ctrl");
 const recipes = require("./controllers/recipe-ctrl");
 const auth = require("./middleware/user");
+const recipeAuth = require("./middleware/recipe");
 const db = require("./db");
 
 const app = express();
@@ -45,6 +46,10 @@ app.get("/recipes", (req, res) => {
 
 app.get("/recipe/:id", (req, res) => {
   recipes.getRecipe(req, res);
+});
+
+app.delete("/recipe/:id", recipeAuth, (req, res) => {
+  recipes.deleteRecipe(req, res);
 });
 
 app.listen(apiPort, () => console.log(`Server is running on port ${apiPort}`));

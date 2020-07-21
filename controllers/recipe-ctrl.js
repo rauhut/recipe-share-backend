@@ -73,4 +73,22 @@ getRecipe = async (req, res) => {
   ).catch((err) => console.log(err));
 };
 
-module.exports = { addRecipe, getRecipes, getRecipe };
+deleteRecipe = async (req, res) => {
+  await Recipe.findOneAndDelete(
+    { _id: mongoose.Types.ObjectId(req.params.id) },
+    (err, recipe) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+
+      if (!recipe) {
+        return res
+          .status(400)
+          .json({ success: false, error: "Recipe not found" });
+      }
+      return res.status(200).json({ success: true, data: recipe });
+    }
+  ).catch((err) => console.log(err));
+};
+
+module.exports = { addRecipe, getRecipes, getRecipe, deleteRecipe };
