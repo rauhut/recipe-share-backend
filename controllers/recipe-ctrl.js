@@ -1,11 +1,17 @@
 const Recipe = require("../models/recipe-model");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
 
 addRecipe = async (req, res) => {
   const body = req.body;
   if (!body.name || !body.cookTime || !body.ingredients || !body.steps) {
     return res.status(400).json("incorrect form submission");
   }
+
+  const token = req.header("Authorization").replace("Bearer ", "");
+  const data = jwt.verify(token, "JWT_KEY");
+  console.log(data);
+  console.log(data._id);
 
   const recipe = new Recipe({
     name: body.name,
@@ -14,6 +20,7 @@ addRecipe = async (req, res) => {
     steps: body.steps,
     description: body.description,
     picture: body.picture,
+    createdBy: data._id,
   });
 
   if (!recipe) {

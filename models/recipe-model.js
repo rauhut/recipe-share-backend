@@ -9,6 +9,7 @@ const Recipe = new Schema(
     steps: { type: [String], required: true },
     description: { type: String, required: false },
     picture: { type: String, required: false },
+    createdBy: { type: Schema.Types.ObjectId, required: true },
   },
   { timestamps: true }
 );
