@@ -10,8 +10,6 @@ addRecipe = async (req, res) => {
 
   const token = req.header("Authorization").replace("Bearer ", "");
   const data = jwt.verify(token, "JWT_KEY");
-  console.log(data);
-  console.log(data._id);
 
   const recipe = new Recipe({
     name: body.name,
