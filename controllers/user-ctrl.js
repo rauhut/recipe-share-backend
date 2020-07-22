@@ -24,13 +24,13 @@ handleSignin = async (req, res, bcrypt) => {
       }
     ).catch(console.log);
   } else {
-    if (!body.email || !body.password) {
+    if (!body.username || !body.password) {
       return res
         .status(400)
         .json({ success: false, error: "incorrect form submission" });
     }
 
-    await User.findOne({ email: body.email }, (err, user) => {
+    await User.findOne({ username: body.username }, (err, user) => {
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
@@ -56,15 +56,15 @@ handleSignin = async (req, res, bcrypt) => {
 
 handleRegister = async (req, res, bcrypt) => {
   const body = req.body;
-  if (!body.name || !body.email || !body.password) {
+  if (!body.username || !body.password) {
     return res.status(400).json("incorrect form submission");
   }
 
-  await User.find({ email: body.email }, (err, account) => {
+  await User.find({ username: body.username }, (err, account) => {
     if (account.length) {
       return res.status(400).json({
         success: false,
-        error: "User already exists with that email address",
+        error: "User already exists with that username",
       });
     }
   });
@@ -72,8 +72,7 @@ handleRegister = async (req, res, bcrypt) => {
   const hash = bcrypt.hashSync(body.password);
 
   const user = new User({
-    name: body.name,
-    email: body.email,
+    username: body.username,
     password: hash,
     recipes: body.recipes,
   });
