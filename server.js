@@ -52,4 +52,8 @@ app.delete("/recipe/:id", recipeAuth, (req, res) => {
   recipes.deleteRecipe(req, res);
 });
 
+app.put("/recipe/:id", recipeAuth, (req, res) => {
+  recipes.updateRecipe(req, res);
+});
+
 app.listen(apiPort, () => console.log(`Server is running on port ${apiPort}`));

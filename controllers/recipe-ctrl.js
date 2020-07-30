@@ -91,4 +91,45 @@ deleteRecipe = async (req, res) => {
   ).catch((err) => console.log(err));
 };
 
-module.exports = { addRecipe, getRecipes, getRecipe, deleteRecipe };
+updateRecipe = async (req, res) => {
+  const body = req.body;
+
+  if (!body.name || !body.cookTime || !body.ingredients || !body.steps) {
+    return res.status(400).json("incorrect form submission");
+  }
+
+  await Recipe.findOneAndUpdate(
+    { _id: mongoose.Types.ObjectId(req.params.id) },
+    {
+      $set: {
+        name: body.name,
+        cookTime: body.cookTime,
+        ingredients: body.ingredients,
+        steps: body.steps,
+        description: body.description,
+        picture: body.picture,
+      },
+    },
+    { new: true },
+    (err, recipe) => {
+      if (err) {
+        return res.status(400).json({ success: false, error: err });
+      }
+
+      if (!recipe) {
+        return res
+          .status(400)
+          .json({ success: false, error: "Recipe not found" });
+      }
+      return res.status(200).json({ success: true, data: recipe });
+    }
+  );
+};
+
+module.exports = {
+  addRecipe,
+  getRecipes,
+  getRecipe,
+  deleteRecipe,
+  updateRecipe,
+};
